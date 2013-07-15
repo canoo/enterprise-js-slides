@@ -23,7 +23,7 @@
             <br>
 
             <p style="text-align: right;">
-                <small>by Oleg Buss, Andreas Hölzl</small>
+                <small>Oleg Buss, Andreas Hölzl</small>
             </p>
 
         </section>
@@ -158,7 +158,7 @@
                 </ul>
             </section>
             <section>
-                <h2>JQuery Mobile</h2>
+                <h3>JQuery Mobile</h3>
                 <br>
                 <ul>
                     <li>nice UI components</li>
@@ -168,7 +168,7 @@
                 </ul>
             </section>
             <section>
-                <h2>Sencha Touch</h2>
+                <h3>Sencha Touch</h3>
                 <br>
                 <ul>
                     <li>cross-plattform UI components</li>
@@ -180,17 +180,17 @@
                 </ul>
             </section>
             <section>
-                <h2>mGWT</h2>
+                <h3>mGWT</h3>
                 <br>
                 <ul>
-                    <li>cross-plattform, multi-channel approach</li>
+                    <li>cross-plattform, multi-channel</li>
                     <li>few UI components</li>
                     <li>plattform optimized code</li>
-                    <li>slow iteration cycles</li>
+                    <li>slow iteration cycles, complex</li>
                 </ul>
             </section>
             <section>
-                <h2>backbone.js</h2>
+                <h3>backbone.js</h3>
                 <br>
                 <ul>
                     <li>lightweight</li>
@@ -202,14 +202,217 @@
 
         <section data-background="#ADE4D3">
             <section>
-                <h2>How to do</h2>
+                <h2>Performance Considerations</h2>
                 <br>
                 <ul>
                     <li>shallow DOM</li>
                     <li>CSS3 where possible</li>
                     <li>small resource footprint</li>
-                    <li>modularized, testable</li>
+                    <li>modularization, testable code</li>
                     <li>fast iteration cycles</li>
+                    <li>continuous integration</li>
+                </ul>
+            </section>
+        </section>
+
+        <section data-background="#ADE4D3">
+            <section>
+                <h2>Agenda</h2>
+                <br>
+                <ul>
+                    <li>Modularization</li>
+                    <li>Build automatization</li>
+                    <li>External libraries</li>
+                    <li>Testing</li>
+                    <li>Backbone.js MVC - I</li>
+                </ul>
+                <p style="margin: 20px;">
+                <em>lunch break</em>
+                </p>
+                <ul>
+                    <li>Backbone.js MVC - II</li>
+                    <li>event bus, deferreds</li>
+                    <li>native apps</li>
+                    <li>dolphin.js</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Modularization</h2>
+                <br>
+                <small>Module Pattern, AMD, Require.js</small>
+            </section>
+            <section>
+                <h3>Object Literal</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+var myObjectLiteral = {
+
+    variableKey: variableValue,
+
+    functionKey: function () {
+        // ...
+    };
+};
+                </code></pre>
+            </section>
+            <section>
+                <h3>Module Pattern</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+var testModule = (function () {
+
+    var counter = 0;
+
+    return {
+        incrementCounter: function () {
+        return counter++;
+    },
+
+    resetCounter: function () {
+        console.log( "counter value prior to reset: " + counter );
+        counter = 0;
+    }
+};
+
+})();
+
+// Usage:
+
+// Increment our counter
+testModule.incrementCounter();
+
+// Check the counter value and reset
+// Outputs: 1
+testModule.resetCounter();
+                </code></pre>
+            </section>
+            <section>
+                <h3>Module Pattern - Mixins</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+// Global module
+var myModule = (function ( jQ, _ ) {
+
+    function privateMethod1(){
+        jQ(".container").html("test");
+    }
+
+    function privateMethod2(){
+        console.log( _.min([10, 5, 100, 2, 1000]) );
+    }
+
+    return{
+        publicMethod: function(){
+            privateMethod1();
+        }
+    };
+
+// Pull in jQuery and Underscore
+}( jQuery, _ ));
+
+myModule.publicMethod();
+                </code></pre>
+            </section>
+            <section>
+                <h3>Script loading</h3>
+                <br>
+                <h4>synchronous</h4>
+                <pre><code data-trim contenteditable>
+&lt;head&gt;
+    <script src=”core.js” type=”text/javascript”></script>
+    <script src=”more.js” type=”text/javascript”></script>
+&lt;/head&gt;
+                </code></pre>
+                <h4>asynchronous</h4>
+                <pre><code data-trim contenteditable>
+var script = document.createElement('script');
+
+var firstScript = document.getElementsByTagName('script')[0];
+
+script.src = "http://example.com/myscript.min.js";
+
+firstScript.parentNode.insertBefore( script, firstScript );
+                </code></pre>
+
+                <h4>require()</h4>
+                <pre><code data-trim contenteditable>
+require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
+    JSON = JSON || window.JSON;
+    console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>AMD - Asynchronous Module Definition</h3>
+                <br>
+                <h4>module definition</h4>
+                <pre><code data-trim contenteditable>
+define(
+    module_id /*optional*/,
+    [dependencies] /*optional*/,
+    definition function /*function for instantiating the module or object*/
+);
+                </code></pre>
+                <h4>module example</h4>
+                <pre><code data-trim contenteditable>
+define(
+    "myModule",
+    ["math", "graph"],
+    function ( math, graph ) {
+        return {
+            plot: function( x, y ){
+                return graph.drawPie( math.randomGrid( x, y ) );
+            }
+        };
+    }
+);
+                </code></pre>
+            </section>
+            <section>
+                <h3>Dynamically loaded dependencies</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+define(function ( require ) {
+    var isReady = false, foobar;
+
+    require(["foo", "bar"], function ( foo, bar ) {
+        isReady = true;
+        foobar = foo() + bar();
+    });
+
+    return {
+        isReady: isReady,
+        foobar: foobar
+    };
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Require.JS</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+require(["app/myModule"],
+
+    function( myModule ){
+        // start the main module which in-turn
+        // loads other modules
+        var module = new myModule();
+        module.doStuff();
+});
+                </code></pre>
+            </section>
+            <section>
+                <h2>References</h2>
+                <br>
+                <ul>
+                    <li><a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank">JavaScript design patterns</a></li>
+                    <li><a href="http://addyosmani.com/writing-modular-js/" target="_blank">Writing modular JavaScript</a></li>
+                    <li><a href="http://msdn.microsoft.com/en-us/magazine/hh227261.aspx" target="_blank">Importance of script loaders</a></li>
+                    <li><a href="http://requirejs.org/docs/whyamd.html" target="_blank">Why AMD?</a></li>
                 </ul>
             </section>
         </section>
@@ -220,7 +423,6 @@
             <small>
                 Refactor the list editing application into separate AMD modules.
             </small>
-
         </section>
 
     </div>
