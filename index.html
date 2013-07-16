@@ -417,13 +417,218 @@ require(["app/myModule"],
             </section>
         </section>
 
-        <section>
+        <section data-background="#B2B6E4">
             <h2>Exercise 1 - Require.js</h2>
             <br>
             <small>
                 Refactor the list editing application into separate AMD modules.
             </small>
         </section>
+
+        <section>
+            <section>
+                <h2>Build automatization</h2>
+                <br>
+                <small><a href="http://gruntjs.com/" target="_blank">grunt</a></small>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Integrating external libraries</h2>
+                <br>
+                <small><a href="http://bower.io/" target="_blank">bower</a></small>
+            </section>
+        </section>
+
+
+        <section>
+            <section>
+                <h2>Testing</h2>
+                <br>
+                <small><a href="http://docs.busterjs.org/en/develop/" target="_blank">buster.js</a></small>
+            </section>
+            <section>
+                <h3>Object Literal</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+                    var myObjectLiteral = {
+
+                    variableKey: variableValue,
+
+                    functionKey: function () {
+                    // ...
+                    };
+                    };
+                </code></pre>
+            </section>
+            <section>
+                <h3>Module Pattern</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+                    var testModule = (function () {
+
+                    var counter = 0;
+
+                    return {
+                    incrementCounter: function () {
+                    return counter++;
+                    },
+
+                    resetCounter: function () {
+                    console.log( "counter value prior to reset: " + counter );
+                    counter = 0;
+                    }
+                    };
+
+                    })();
+
+                    // Usage:
+
+                    // Increment our counter
+                    testModule.incrementCounter();
+
+                    // Check the counter value and reset
+                    // Outputs: 1
+                    testModule.resetCounter();
+                </code></pre>
+            </section>
+            <section>
+                <h3>Module Pattern - Mixins</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+                    // Global module
+                    var myModule = (function ( jQ, _ ) {
+
+                    function privateMethod1(){
+                    jQ(".container").html("test");
+                    }
+
+                    function privateMethod2(){
+                    console.log( _.min([10, 5, 100, 2, 1000]) );
+                    }
+
+                    return{
+                    publicMethod: function(){
+                    privateMethod1();
+                    }
+                    };
+
+                    // Pull in jQuery and Underscore
+                    }( jQuery, _ ));
+
+                    myModule.publicMethod();
+                </code></pre>
+            </section>
+            <section>
+                <h3>Script loading</h3>
+                <br>
+                <h4>synchronous</h4>
+                <pre><code data-trim contenteditable>
+                    &lt;head&gt;
+                    <script src=”core.js” type=”text/javascript”></script>
+                    <script src=”more.js” type=”text/javascript”></script>
+                    &lt;/head&gt;
+                </code></pre>
+                <h4>asynchronous</h4>
+                <pre><code data-trim contenteditable>
+                    var script = document.createElement('script');
+
+                    var firstScript = document.getElementsByTagName('script')[0];
+
+                    script.src = "http://example.com/myscript.min.js";
+
+                    firstScript.parentNode.insertBefore( script, firstScript );
+                </code></pre>
+
+                <h4>require()</h4>
+                <pre><code data-trim contenteditable>
+                    require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
+                    JSON = JSON || window.JSON;
+                    console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
+                    });
+                </code></pre>
+            </section>
+            <section>
+                <h3>AMD - Asynchronous Module Definition</h3>
+                <br>
+                <h4>module definition</h4>
+                <pre><code data-trim contenteditable>
+                    define(
+                    module_id /*optional*/,
+                    [dependencies] /*optional*/,
+                    definition function /*function for instantiating the module or object*/
+                    );
+                </code></pre>
+                <h4>module example</h4>
+                <pre><code data-trim contenteditable>
+                    define(
+                    "myModule",
+                    ["math", "graph"],
+                    function ( math, graph ) {
+                    return {
+                    plot: function( x, y ){
+                    return graph.drawPie( math.randomGrid( x, y ) );
+                    }
+                    };
+                    }
+                    );
+                </code></pre>
+            </section>
+            <section>
+                <h3>Dynamically loaded dependencies</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+                    define(function ( require ) {
+                    var isReady = false, foobar;
+
+                    require(["foo", "bar"], function ( foo, bar ) {
+                    isReady = true;
+                    foobar = foo() + bar();
+                    });
+
+                    return {
+                    isReady: isReady,
+                    foobar: foobar
+                    };
+                    });
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Require.JS</h3>
+                <br>
+                <pre><code data-trim contenteditable>
+                    require(["app/myModule"],
+
+                    function( myModule ){
+                    // start the main module which in-turn
+                    // loads other modules
+                    var module = new myModule();
+                    module.doStuff();
+                    });
+                </code></pre>
+            </section>
+            <section>
+                <h2>References</h2>
+                <br>
+                <ul>
+                    <li><a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank">JavaScript design patterns</a></li>
+                    <li><a href="http://addyosmani.com/writing-modular-js/" target="_blank">Writing modular JavaScript</a></li>
+                    <li><a href="http://msdn.microsoft.com/en-us/magazine/hh227261.aspx" target="_blank">Importance of script loaders</a></li>
+                    <li><a href="http://requirejs.org/docs/whyamd.html" target="_blank">Why AMD?</a></li>
+                </ul>
+            </section>
+        </section>
+
+        <section data-background="#B2B6E4">
+            <h2>Exercise 2 - buster.js</h2>
+            <br>
+            <small>
+                Write a simple test for XYZ
+            </small>
+        </section>
+
 
     </div>
 
