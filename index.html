@@ -392,18 +392,39 @@ define(function ( require ) {
 });
                 </code></pre>
             </section>
+            <section>
+                <h3>Require.JS - Setup</h3>
+                <br>
+                <small>src/config.js</small>
+                <pre><code data-trim>
+require.config({
+    baseUrl: 'app',
+    paths  : {
+        'app': '../app'
+    },
+    shims  : {}
+});
 
+// run the app
+require(['app']);
+                </code></pre>
+                <small>src/index.html</small>
+                <pre><code data-trim>
+    &lt;script data-main="config.js"
+        src="scripts/requirejs/require.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+                </code></pre>
+            </section>
             <section>
                 <h3>Require.JS</h3>
                 <br>
                 <pre><code data-trim>
-require(["app/myModule"],
-
-    function( myModule ){
-        // start the main module which in-turn
-        // loads other modules
-        var module = new myModule();
-        module.doStuff();
+require([
+    "app/myModule"
+], function( myModule ){
+    // main module and dependent modules are loaded
+    var module = new myModule();
+    module.doStuff();
 });
                 </code></pre>
             </section>
