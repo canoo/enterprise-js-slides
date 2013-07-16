@@ -247,7 +247,7 @@
             <section>
                 <h3>Object Literal</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 var myObjectLiteral = {
 
     variableKey: variableValue,
@@ -261,7 +261,7 @@ var myObjectLiteral = {
             <section>
                 <h3>Module Pattern</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 var testModule = (function () {
 
     var counter = 0;
@@ -292,7 +292,7 @@ testModule.resetCounter();
             <section>
                 <h3>Module Pattern - Mixins</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 // Global module
 var myModule = (function ( jQ, _ ) {
 
@@ -320,14 +320,14 @@ myModule.publicMethod();
                 <h3>Script loading</h3>
                 <br>
                 <h4>synchronous</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 &lt;head&gt;
     <script src=”core.js” type=”text/javascript”></script>
     <script src=”more.js” type=”text/javascript”></script>
 &lt;/head&gt;
                 </code></pre>
                 <h4>asynchronous</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 var script = document.createElement('script');
 
 var firstScript = document.getElementsByTagName('script')[0];
@@ -338,7 +338,7 @@ firstScript.parentNode.insertBefore( script, firstScript );
                 </code></pre>
 
                 <h4>require()</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
     JSON = JSON || window.JSON;
     console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
@@ -349,7 +349,7 @@ require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
                 <h3>AMD - Asynchronous Module Definition</h3>
                 <br>
                 <h4>module definition</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 define(
     module_id /*optional*/,
     [dependencies] /*optional*/,
@@ -357,7 +357,7 @@ define(
 );
                 </code></pre>
                 <h4>module example</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 define(
     "myModule",
     ["math", "graph"],
@@ -374,7 +374,7 @@ define(
             <section>
                 <h3>Dynamically loaded dependencies</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 define(function ( require ) {
     var isReady = false, foobar;
 
@@ -394,7 +394,7 @@ define(function ( require ) {
             <section>
                 <h3>Require.JS</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
 require(["app/myModule"],
 
     function( myModule ){
@@ -427,14 +427,6 @@ require(["app/myModule"],
 
         <section>
             <section>
-                <h2>Build automatization</h2>
-                <br>
-                <small><a href="http://gruntjs.com/" target="_blank">grunt</a></small>
-            </section>
-        </section>
-
-        <section>
-            <section>
                 <h2>Integrating external libraries</h2>
                 <br>
                 <small><a href="http://bower.io/" target="_blank">bower</a></small>
@@ -446,92 +438,64 @@ require(["app/myModule"],
             <section>
                 <h2>Testing</h2>
                 <br>
-                <small><a href="http://docs.busterjs.org/en/develop/" target="_blank">buster.js</a></small>
+                <small>with <a href="http://docs.busterjs.org/en/develop/" target="_blank">buster.js</a></small>
             </section>
             <section>
-                <h3>Object Literal</h3>
+                <h3>Setup</h3>
                 <br>
-                <pre><code data-trim contenteditable>
-                    var myObjectLiteral = {
+                <small>Buster.JS on the command-line requires Node.js 0.6.3 or newer and npm.</small>
+                <h5>Installation</h5>
+                <pre><code data-trim>
+npm install -g buster
+npm install -g buster-amd
+                </code></pre>
+                <br>
+                <h5>Configuration</h5>
+                <br>
+                <small>test/buster.js</small>
+                <pre><code data-trim>
+var config = module.exports;
 
-                    variableKey: variableValue,
-
-                    functionKey: function () {
-                    // ...
-                    };
-                    };
+config["Browser tests"] = {
+    environment: "browser",
+    libs: ["lib/**/*.js"],
+    sources: ["src/core.js", "src/**/*.js"],
+    tests: ["test/**/*.js"]
+};
                 </code></pre>
             </section>
             <section>
-                <h3>Module Pattern</h3>
+                <h3>Setup (cont.)</h3>
                 <br>
-                <pre><code data-trim contenteditable>
-                    var testModule = (function () {
-
-                    var counter = 0;
-
-                    return {
-                    incrementCounter: function () {
-                    return counter++;
-                    },
-
-                    resetCounter: function () {
-                    console.log( "counter value prior to reset: " + counter );
-                    counter = 0;
-                    }
-                    };
-
-                    })();
-
-                    // Usage:
-
-                    // Increment our counter
-                    testModule.incrementCounter();
-
-                    // Check the counter value and reset
-                    // Outputs: 1
-                    testModule.resetCounter();
+                <h5>Test server</h5>
+                <pre><code data-trim>
+% buster server
+                </code></pre>
+                <h5>Test client registration</h5>
+                <img src="resources/images/buster-server-capture.png">
+                <h5>Test execution</h5>
+                <pre><code data-trim>
+% buster test
                 </code></pre>
             </section>
             <section>
-                <h3>Module Pattern - Mixins</h3>
+                <h3>Writing tests</h3>
                 <br>
-                <pre><code data-trim contenteditable>
-                    // Global module
-                    var myModule = (function ( jQ, _ ) {
-
-                    function privateMethod1(){
-                    jQ(".container").html("test");
-                    }
-
-                    function privateMethod2(){
-                    console.log( _.min([10, 5, 100, 2, 1000]) );
-                    }
-
-                    return{
-                    publicMethod: function(){
-                    privateMethod1();
-                    }
-                    };
-
-                    // Pull in jQuery and Underscore
-                    }( jQuery, _ ));
-
-                    myModule.publicMethod();
+                <pre><code data-trim>
                 </code></pre>
             </section>
             <section>
                 <h3>Script loading</h3>
                 <br>
                 <h4>synchronous</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     &lt;head&gt;
                     <script src=”core.js” type=”text/javascript”></script>
                     <script src=”more.js” type=”text/javascript”></script>
                     &lt;/head&gt;
                 </code></pre>
                 <h4>asynchronous</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     var script = document.createElement('script');
 
                     var firstScript = document.getElementsByTagName('script')[0];
@@ -542,7 +506,7 @@ require(["app/myModule"],
                 </code></pre>
 
                 <h4>require()</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
                     JSON = JSON || window.JSON;
                     console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
@@ -553,7 +517,7 @@ require(["app/myModule"],
                 <h3>AMD - Asynchronous Module Definition</h3>
                 <br>
                 <h4>module definition</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     define(
                     module_id /*optional*/,
                     [dependencies] /*optional*/,
@@ -561,7 +525,7 @@ require(["app/myModule"],
                     );
                 </code></pre>
                 <h4>module example</h4>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     define(
                     "myModule",
                     ["math", "graph"],
@@ -578,7 +542,7 @@ require(["app/myModule"],
             <section>
                 <h3>Dynamically loaded dependencies</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     define(function ( require ) {
                     var isReady = false, foobar;
 
@@ -598,7 +562,7 @@ require(["app/myModule"],
             <section>
                 <h3>Require.JS</h3>
                 <br>
-                <pre><code data-trim contenteditable>
+                <pre><code data-trim>
                     require(["app/myModule"],
 
                     function( myModule ){
@@ -627,6 +591,14 @@ require(["app/myModule"],
             <small>
                 Write a simple test for XYZ
             </small>
+        </section>
+
+        <section>
+            <section>
+                <h2>Build automatization</h2>
+                <br>
+                <small><a href="http://gruntjs.com/" target="_blank">grunt</a></small>
+            </section>
         </section>
 
 
