@@ -444,24 +444,71 @@ require(["app/myModule"],
                 <h3>Setup</h3>
                 <br>
                 <small>Buster.JS on the command-line requires Node.js 0.6.3 or newer and npm.</small>
-                <h5>Installation</h5>
+                <h5>Installation - buster.js</h5>
                 <pre><code data-trim>
 npm install -g buster
+                </code></pre>
+                <h5>Installation - buster-AMD</h5>
+                <pre><code data-trim>
 npm install -g buster-amd
                 </code></pre>
-                <br>
-                <h5>Configuration</h5>
+            </section>
+            <section>
+                <h5>Configuration (with AMD)</h5>
                 <br>
                 <small>test/buster.js</small>
                 <pre><code data-trim>
 var config = module.exports;
 
-config["Browser tests"] = {
-    environment: "browser",
-    libs: ["lib/**/*.js"],
-    sources: ["src/core.js", "src/**/*.js"],
-    tests: ["test/**/*.js"]
+config["Browser Tests"] = {
+    rootPath   : "..",
+    environment: "browser", // or "node"
+
+    autoRun: false,
+
+    extensions: [
+        require("buster-amd")
+    ],
+
+    libs: [
+        "src/scripts/requirejs/require.js",
+        "test/main-setup.js"
+    ],
+
+    sources: [
+        "src/app/**/*.js"
+    ],
+
+    tests: [
+        "test/app/**/*-test.js"
+    ]
 };
+                </code></pre>
+            </section>
+            <section>
+                <h5>Configuration (with AMD) cont.</h5>
+                <br>
+                <small>test/main-setup.js</small>
+                <pre><code data-trim>
+// Require.js configuration
+require.config({
+
+    baseUrl: '',
+
+    paths: {
+        controller : 'src/app/controller',
+        models     : 'src/app/models',
+        views      : 'src/app/views'
+    },
+
+    shim : {
+    }
+
+});
+
+require([], function () {
+    console.log("INIT DONE");
+});
                 </code></pre>
             </section>
             <section>
@@ -482,106 +529,42 @@ config["Browser tests"] = {
                 <h3>Writing tests</h3>
                 <br>
                 <pre><code data-trim>
+define([
+    'buster',
+    'models/Model'
+], function (buster, Model) {
+
+    var assert = buster.assertions.assert;
+    var refute = buster.assertions.refute;
+
+    buster.testCase("Model tests ...", {
+        "my nested test scenario ..." : {
+            "setUp": function () {
+                // optional setup
+            },
+
+            "tearDown": function () {
+                // optional tear down
+            },
+
+            "my tested feature ...": function () {
+                assert(true);
+            }
+        },
+    }
+});
                 </code></pre>
             </section>
             <section>
-                <h3>Script loading</h3>
+                <h3>Headless tests (e.g. CI server)</h3>
                 <br>
-                <h4>synchronous</h4>
+                <small>with <a href="http://phantomjs.org/" target="_blank">phantom.js</a></small>
                 <pre><code data-trim>
-                    &lt;head&gt;
-                    <script src=”core.js” type=”text/javascript”></script>
-                    <script src=”more.js” type=”text/javascript”></script>
-                    &lt;/head&gt;
+buster-server
+# on a separate terminal
+phantomjs ./node_modules/buster/script/phantom.js &
+buster-test
                 </code></pre>
-                <h4>asynchronous</h4>
-                <pre><code data-trim>
-                    var script = document.createElement('script');
-
-                    var firstScript = document.getElementsByTagName('script')[0];
-
-                    script.src = "http://example.com/myscript.min.js";
-
-                    firstScript.parentNode.insertBefore( script, firstScript );
-                </code></pre>
-
-                <h4>require()</h4>
-                <pre><code data-trim>
-                    require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
-                    JSON = JSON || window.JSON;
-                    console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
-                    });
-                </code></pre>
-            </section>
-            <section>
-                <h3>AMD - Asynchronous Module Definition</h3>
-                <br>
-                <h4>module definition</h4>
-                <pre><code data-trim>
-                    define(
-                    module_id /*optional*/,
-                    [dependencies] /*optional*/,
-                    definition function /*function for instantiating the module or object*/
-                    );
-                </code></pre>
-                <h4>module example</h4>
-                <pre><code data-trim>
-                    define(
-                    "myModule",
-                    ["math", "graph"],
-                    function ( math, graph ) {
-                    return {
-                    plot: function( x, y ){
-                    return graph.drawPie( math.randomGrid( x, y ) );
-                    }
-                    };
-                    }
-                    );
-                </code></pre>
-            </section>
-            <section>
-                <h3>Dynamically loaded dependencies</h3>
-                <br>
-                <pre><code data-trim>
-                    define(function ( require ) {
-                    var isReady = false, foobar;
-
-                    require(["foo", "bar"], function ( foo, bar ) {
-                    isReady = true;
-                    foobar = foo() + bar();
-                    });
-
-                    return {
-                    isReady: isReady,
-                    foobar: foobar
-                    };
-                    });
-                </code></pre>
-            </section>
-
-            <section>
-                <h3>Require.JS</h3>
-                <br>
-                <pre><code data-trim>
-                    require(["app/myModule"],
-
-                    function( myModule ){
-                    // start the main module which in-turn
-                    // loads other modules
-                    var module = new myModule();
-                    module.doStuff();
-                    });
-                </code></pre>
-            </section>
-            <section>
-                <h2>References</h2>
-                <br>
-                <ul>
-                    <li><a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank">JavaScript design patterns</a></li>
-                    <li><a href="http://addyosmani.com/writing-modular-js/" target="_blank">Writing modular JavaScript</a></li>
-                    <li><a href="http://msdn.microsoft.com/en-us/magazine/hh227261.aspx" target="_blank">Importance of script loaders</a></li>
-                    <li><a href="http://requirejs.org/docs/whyamd.html" target="_blank">Why AMD?</a></li>
-                </ul>
             </section>
         </section>
 
@@ -589,7 +572,7 @@ config["Browser tests"] = {
             <h2>Exercise 2 - buster.js</h2>
             <br>
             <small>
-                Write a simple test for XYZ
+                Write a simple test for the Model class
             </small>
         </section>
 
