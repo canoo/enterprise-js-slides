@@ -249,7 +249,7 @@
             <section>
                 <h3>Object Literal</h3>
                 <br>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 var myObjectLiteral = {
 
     variableKey: variableValue,
@@ -263,7 +263,7 @@ var myObjectLiteral = {
             <section>
                 <h3>Module Pattern</h3>
                 <br>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 var testModule = (function () {
 
     var counter = 0;
@@ -294,7 +294,7 @@ testModule.resetCounter();
             <section>
                 <h3>Module Pattern - Mixins</h3>
                 <br>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 // Global module
 var myModule = (function ( jQ, _ ) {
 
@@ -329,7 +329,7 @@ myModule.publicMethod();
 &lt;/head&gt;
                 </code></pre>
                 <h4>asynchronous</h4>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 var script = document.createElement('script');
 
 var firstScript = document.getElementsByTagName('script')[0];
@@ -340,7 +340,7 @@ firstScript.parentNode.insertBefore( script, firstScript );
                 </code></pre>
 
                 <h4>require()</h4>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
     JSON = JSON || window.JSON;
     console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
@@ -351,15 +351,16 @@ require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
                 <h3>AMD - Asynchronous Module Definition</h3>
                 <br>
                 <h4>module definition</h4>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 define(
     module_id /*optional*/,
     [dependencies] /*optional*/,
-    definition function /*function for instantiating the module or object*/
+    definition function /*function for instantiating
+                            the module or object*/
 );
                 </code></pre>
                 <h4>module example</h4>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 define(
     "myModule",
     ["math", "graph"],
@@ -376,7 +377,7 @@ define(
             <section>
                 <h3>Dynamically loaded dependencies</h3>
                 <br>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 define(function ( require ) {
     var isReady = false, foobar;
 
@@ -393,10 +394,24 @@ define(function ( require ) {
                 </code></pre>
             </section>
             <section>
+                <h3>Require.JS</h3>
+                <br>
+                <pre><code data-trim class="javascript">
+require([
+    "app/myModule"
+], function( myModule ){
+    // main module and dependent modules are loaded
+    var module = new myModule();
+    module.doStuff();
+});
+                </code></pre>
+            </section>
+
+            <section>
                 <h3>Require.JS - Setup</h3>
                 <br>
                 <small>src/config.js</small>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 require.config({
     baseUrl: 'app',
     paths  : {
@@ -404,9 +419,7 @@ require.config({
     },
     shims  : {}
 });
-
-// run the app
-require(['app']);
+require(['app']); // run the app
                 </code></pre>
                 <small>src/index.html</small>
                 <pre><code data-trim>
@@ -414,17 +427,12 @@ require(['app']);
         src="scripts/requirejs/require.js"&gt;&lt;/script&gt;
 &lt;/body&gt;
                 </code></pre>
-            </section>
-            <section>
-                <h3>Require.JS</h3>
-                <br>
-                <pre><code data-trim>
-require([
-    "app/myModule"
-], function( myModule ){
-    // main module and dependent modules are loaded
-    var module = new myModule();
-    module.doStuff();
+                <small>src/app.js</small>
+                <pre><code data-trim class="javascript">
+define([
+    // dependencies
+], function(/*references*/){
+    // your app start point
 });
                 </code></pre>
             </section>
@@ -480,7 +488,7 @@ npm install -g buster-amd
                 <h5>Configuration (with AMD)</h5>
                 <br>
                 <small>test/buster.js</small>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 var config = module.exports;
 
 config["Browser Tests"] = {
@@ -512,7 +520,7 @@ config["Browser Tests"] = {
                 <h5>Configuration (with AMD) cont.</h5>
                 <br>
                 <small>test/main-setup.js</small>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 // Require.js configuration
 require.config({
 
@@ -551,7 +559,7 @@ require([], function () {
             <section>
                 <h3>Writing tests</h3>
                 <br>
-                <pre><code data-trim>
+                <pre><code data-trim class="javascript">
 define([
     'buster',
     'models/Model'
@@ -607,6 +615,72 @@ buster-test
             </section>
         </section>
 
+        <section>
+            <section>
+                <h2>Backbone.js</h2>
+                <br>
+                <h3><a href="http://backbonejs.org/#Model" target="_blank">Model</a></h3>
+            </section>
+            <section>
+                <h3>Model - Instantiation</h3>
+                <br>
+                <small>Backbone models contain data and optionally the logic around this data.</small>
+                <br>
+                <small>Models can be created by extending <em>Backbone.Model</em>.</small>
+                <br>
+                <h5>Empty model</h5>
+                <pre><code data-trim class="javascript">
+// define a new generic Item model
+var Item = Backbone.Model.extend({});
+// create instance with no values
+var item1 = new Item();
+                </code></pre>
+                <h5>Initialized model</h5>
+                <pre><code data-trim class="javascript">
+// instance with 'name' and 'date' field
+var item2 = new Item({
+    name: 'My Item',
+    date: '2013-07-22'
+});
+console.log(item2.toJSON());
+                </code></pre>
+            </section>
+            <section>
+                <h3>Model - Construction</h3>
+                <br>
+                <small>Backbone models provides an optional <em>constructor()</em> method.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+return Backbone.Model.extend({
+
+    constructor: function() {
+        // do something with arguments object
+        // e.g. parameter validation / conversion
+
+        // call 'super'
+        Backbone.Model.apply(this, arguments);
+    },
+
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>Model - Initialization</h3>
+                <br>
+                <small>Backbone models provides an optional <em>initialize()</em> method.</small>
+                <br>
+                <small><em>initialize()</em> is executed <strong>after</strong> object construction.</small>
+                <pre><code data-trim class="javascript">
+return Backbone.Model.extend({
+
+    initialize: function() {
+        // initialize extra model properties
+    },
+
+});
+                </code></pre>
+            </section>
+        </section>
 
     </div>
 
