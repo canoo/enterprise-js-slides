@@ -994,6 +994,80 @@ myLayout.removeView(".some-selector");
             </section>
         </section>
 
+<!------------------ Deferreds ------------------>
+
+        <section>
+            <section>
+                <h2>Deferreds and Promises</h2>
+                <br>
+                <h5><a href="http://api.jquery.com/category/deferred-object/" target="_blank">jQuery Deferred</a></h5>
+            </section>
+            <section>
+                <h3>jQuery Deferreds</h3>
+                <br>
+                <p>
+                    <small>
+                        The Deferred object is a <strong>chainable</strong> utility object created by calling the <strong>jQuery.Deferred()</strong> method.
+                        It can register multiple callbacks into <strong>callback queues</strong>, invoke callback queues,
+                        and <strong>relay the success or failure state</strong> of any synchronous or asynchronous function.
+                    </small>
+                </p>
+            </section>
+            <section>
+                <h3>Deferreds</h3>
+                <br>
+                <h5>Callback replacement</h5>
+                <pre><code data-trim class="javascript">
+// implementation using callbacks
+$.ajax({
+    url: "/myServerScript",
+    success: mySuccessFunction,
+    error: myErrorFunction
+});
+                </code></pre>
+                <pre><code data-trim class="javascript">
+// promise based implementation
+var promise = $.ajax({
+    url: "/myServerScript"
+});
+ 
+promise.done(myStopAnimationFunction);
+promise.done(myOtherAjaxFunction);
+promise.done(myShowInfoFunction);
+promise.fail(myErrorFunction);
+                </code></pre>
+            </section>
+            <section>
+                <h3>Deferreds</h3>
+                <br>
+                <h5>Waiting for multiple promises</h5>
+                <pre><code data-trim class="javascript">
+var promise1 = $.ajax("/myServerScript1");
+var promise2 = $.ajax("/myServerScript2");
+
+$.when(promise1, promise2).done(function(res1, res2){
+    // both responses are available
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>Deferreds</h3>
+                <br>
+                <h5>Chaining promises</h5>
+                <pre><code data-trim class="javascript">
+var promise1 = $.ajax("/myServerScript1");
+ 
+function getStuff() {
+    return $.ajax("/myServerScript2");
+}
+ 
+promise1.then(getStuff).then(function(myServerScript2Data){
+    // Both promises are resolved
+});
+                </code></pre>
+            </section>
+        </section>
+
     </div>
 
 </div>
