@@ -460,16 +460,17 @@ define([
             <section>
                 <h2>Integrating external libraries</h2>
                 <br>
-                <small><a href="http://bower.io/" target="_blank">bower</a></small>
+                <small></small>
             </section>
         </section>
 
+<!------------------ Testing ------------------>
 
         <section>
             <section>
                 <h2>Testing</h2>
                 <br>
-                <small>with <a href="http://docs.busterjs.org/en/develop/" target="_blank">buster.js</a></small>
+                <small><a href="http://docs.busterjs.org/en/develop/" target="_blank">buster.js</a></small>
             </section>
             <section>
                 <h3>Setup</h3>
@@ -611,15 +612,17 @@ buster-test
             <section>
                 <h2>Build automatization</h2>
                 <br>
-                <small><a href="http://gruntjs.com/" target="_blank">grunt</a></small>
+                <small><a href="http://gruntjs.com/" target="_blank">grunt.js</a></small>
             </section>
         </section>
+
+<!------------------ Backbone / Model ------------------>
 
         <section>
             <section>
                 <h2>Backbone.js</h2>
                 <br>
-                <h3><a href="http://backbonejs.org/#Model" target="_blank">Model</a></h3>
+                <h5><a href="http://backbonejs.org/#Model" target="_blank">Model</a></h5>
             </section>
             <section>
                 <h3>Model - Instantiation</h3>
@@ -678,6 +681,315 @@ return Backbone.Model.extend({
     },
 
 });
+                </code></pre>
+            </section>
+            <section>
+                <h3>Model - Default values</h3>
+                <br>
+                <small>When creating an instance of the model, any unspecified attributes will be set to their default value.</small>
+                <pre><code data-trim class="javascript">
+var Todo = Backbone.Model.extend({
+    // Default todo attribute values
+    defaults: {
+        title: '',
+        completed: false
+    }
+});
+
+// create instance with default values
+var todo1 = new Todo();
+
+// create instance with custom title
+var todo2 = new Todo({
+    title: 'my custom title'
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>Model - Getter / Setter</h3>
+                <br>
+                <h5>Getter</h5>
+                <pre><code data-trim class="javascript">
+var Todo = Backbone.Model.extend({
+    defaults: {
+        title: '',
+        completed: false
+    }
+});
+
+var todo1 = new Todo();
+var title = todo1.get('title');
+                </code></pre>
+                <h5>Setter</h5>
+                <pre><code data-trim class="javascript">
+var todo1 = new Todo();
+// set a single attribute
+todo1.set('title', 'new title);
+
+// set multiple attributes
+todo1.set({
+    title: 'new title,
+    completed: true
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>Model - Change notification</h3>
+                <br>
+                <small>You can listen to generic changes using the <em>'change'</em> event type or specific attribute changes using <em>'change:attributeName'</em>.</small>
+                <pre><code data-trim class="javascript">
+var Todo = Backbone.Model.extend({
+    defaults: {
+        title: '',
+        completed: false
+    }
+});
+
+var todo1 = new Todo();
+todo1.on('change', function() { /* handle any model change */ });
+todo1.on('change:title', function() { /* handle title changes */ });
+                </code></pre>
+            </section>
+        </section>
+
+
+<!------------------ Backbone / View ------------------>
+
+        <section>
+            <section>
+                <h2>Backbone.js</h2>
+                <br>
+                <h5><a href="http://backbonejs.org/#View" target="_blank">View</a></h5>
+            </section>
+            <section>
+                <h3>View - Custom <em>render()</em></h3>
+                <br>
+                <small>Override <em>render()</em> with your code that renders the view and update <em>this.$el</em> with the new HTML.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+
+    render: function() {
+        this.$el.html('&lt;div&gt;I'm the template&lt;/div&gt;');
+        return this; // enable chained calls
+    }
+
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>View - <em>this.el</em></h3>
+                <br>
+                <h5>this.el</h5>
+                <p>
+                    <small>
+                        All views have a DOM element at all times (the el property), whether they've already been inserted into the page or not.
+                        this.el is created from the view's <em>tagName</em>, <em>className</em>, <em>id</em> and <em>attributes</em> properties, if specified.
+                        If not, <em>el</em> is an empty <em>div</em>.
+                    </small>
+                </p>
+                <br>
+                <h5>this.$el</h5>
+                <p>
+                    <small><em>this.$el</em> is a cached jQuery object for the view's element. A handy reference instead of re-wrapping the DOM element all the time.</small>
+                </p>
+                <br>
+                <h5>el: '#elemid'</h5>
+                <p>
+                    <small>If the element already exists in the page, you can set el as a CSS selector that matches the element.</small>
+                </p>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+    el: '#elemid'
+    // ...
+});
+                </code></pre>
+                <p>
+                    <small>Alternatively, you can set el to an existing element when creating the view.</small>
+                </p>
+                <pre><code data-trim class="javascript">
+var todosView = new TodosView({el: $('#footer')});
+                </code></pre>
+            </section>
+            <section>
+                <h3>View - Templates</h3>
+                <br>
+                <small>Define a view template and render template from model data.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+
+    template: _.template(…),
+
+    render: function() {
+        this.$el.html(this.template(this.model.attributes));
+        return this;
+    }
+
+});
+
+var view1 = new View({
+    // the model attributes
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>View - Model binding</h3>
+                <br>
+                <small>Instead of updating the HTML by hand, you can bind your view's render function to the model's <em>'change'</em> event.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+
+    initialize: function() {
+        // bind model changes to view updates
+        this.listenTo(this.model, "change", this.render);
+    }
+
+    render: function() {
+        // some implementation
+    }
+
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>View - DOM events</h3>
+                <br>
+                <pre><code data-trim class="javascript">
+var DocumentView = Backbone.View.extend({
+
+    events: {
+        "dblclick"                : "open",
+        "click .icon.doc"         : "select",
+        "contextmenu .icon.doc"   : "showMenu",
+        "click .show_notes"       : "toggleNotes",
+        "click .title .lock"      : "editAccessLevel",
+        "mouseover .title .date"  : "showTooltip"
+    },
+
+    open: function() {
+        window.open(this.model.get("viewer_url"));
+    },
+
+    select: function() {
+        this.model.set({selected: true});
+    },
+
+    ...
+
+});
+                </code></pre>
+            </section>
+        </section>
+
+
+<!------------------ Backbone / Controller ------------------>
+
+        <section>
+            <section>
+                <h2>Backbone.js</h2>
+                <br>
+                <h5><a href="http://addyosmani.github.io/backbone-fundamentals/#controllers" target="_blank">Controller</a></h5>
+            </section>
+            <section>
+                <h3>Controller</h3>
+                <br>
+                <p>
+                    <small>
+                        Backbone.js does not have dedicated Controllers.
+                        Backbone’s Views typically contain Controller logic, and Routers are used to help manage application state.
+                        However classical controller can be easily emulated.
+                    </small>
+                </p>
+                <br>
+                <h5>Custom Controller</h5>
+                <pre><code data-trim class="javascript">
+var Controller = function (options) {
+    this.inputView = options.inputView;
+    this.collection = options.collection;
+    this.initialize();
+};
+
+_.extend(Controller.prototype, Backbone.Events, {
+
+    initialize: function() {
+        this.inputView.render();
+
+        this.listenTo(this.inputView, "add", this.onNoteAdd);
+    },
+
+    onNoteAdd: function(item) {
+        // ...
+    }
+
+});
+                </code></pre>
+            </section>
+        </section>
+
+<!------------------ Backbone / LayoutManager ------------------>
+
+        <section>
+            <section>
+                <h2>Backbone.js</h2>
+                <br>
+                <h5><a href="https://github.com/tbranyen/backbone.layoutmanager" target="_blank">LayoutManager</a></h5>
+            </section>
+            <section>
+                <h3>LayoutManager</h3>
+                <br>
+                <h5>Backbone.js plugin that provides:</h5>
+                <br>
+                <ul>
+                    <li>full template lifecycle</li>
+                    <li>layout structuring</li>
+                    <li>ensuring proper cleanup for all Views</li>
+                    <li>control of your nested Views</li>
+                    <li>concise API</li>
+                </ul>
+            </section>
+            <section>
+                <h3>LayoutManager</h3>
+                <br>
+                <h5>Example</h5>
+                <pre><code data-trim class="javascript">
+var LoginView = Backbone.Layout.extend({
+    template: "#login-template"
+});
+
+var main = new Backbone.Layout({
+    template: "#main-layout",
+
+    // In the secondary column, put a new Login View.
+    views: {
+        ".secondary": new LoginView()
+    }
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>LayoutManager - Nested Views</h3>
+                <br>
+                <h5>Nested Views</h5>
+                <pre><code data-trim class="javascript">
+// declarative using 'views' property
+Backbone.Layout.extend({
+    views: {
+        "header": new HeaderView(),
+        "section": new ContentView(),
+        "footer": new FooterView()
+    }
+});
+
+// dynamically setting views
+myLayout.setView("header", new HeaderView());
+
+// ... inserting views
+myLayout.insertView(new ListItemView());
+
+// ... removing views
+myLayout.removeView(".some-selector");
                 </code></pre>
             </section>
         </section>
