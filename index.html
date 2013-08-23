@@ -1068,7 +1068,7 @@ promise1.then(getStuff).then(function(myServerScript2Data){
             </section>
         </section>
 
-        <!------------------ Deferreds ------------------>
+<!------------------ Cordova Intro ------------------>
 
         <section>
             <section>
@@ -1136,6 +1136,97 @@ promise1.then(getStuff).then(function(myServerScript2Data){
             </section>
         </section>
 
+<!------------------ Cordova Setup / Usage ------------------>
+
+        <section>
+            <section>
+                <h2>Cordova Setup / Usage</h2>
+                <br>
+                <h5><a href="http://cordova.apache.org/docs/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface" target="_blank">Cordova - Command Line Interface</a></h5>
+                <h5><a href="http://docs.phonegap.com/en/3.0.0/guide_cli_index.md.html#The%20Command-line%20Interface" target="_blank">Phonegap - Command Line Interface</a></h5>
+            </section>
+            <section>
+                <h3>Cordova</h3>
+                <br>
+                <h5>Setup</h5>
+                <pre><code data-trim>
+npm install -g cordova
+                </code></pre>
+            </section>
+            <section>
+                <h3>Cordova</h3>
+                <br>
+                <h5>Create new project</h5>
+                <pre><code data-trim>
+cordova create hello com.example.hello HelloWorld
+                </code></pre>
+                <ul>
+                    <li><strong>hello</strong> - directory name</li>
+                    <li><strong>com.example.hello</strong> - package name</li>
+                    <li><strong>HelloWorld</strong> - app display text</li>
+                </ul>
+                <br>
+                <p>
+                    <small>See <strong>config.xml</strong> for later changes during development.</small>
+                </p>
+            </section>
+            <section>
+                <h3>Cordova</h3>
+                <br>
+                <h5>Directory structure</h5>
+                <pre><code data-trim>
+hello/
+|--.cordova/
+|-- merges/
+| | |-- android/
+| | |-- blackberry10/
+| | `-- ios/
+|-- www/
+| `-- config.xml
+|-- platforms/
+| |-- android/
+| |-- blackberry10/
+| `-- ios/
+`-- plugins/
+                </code></pre>
+            </section>
+            <section>
+                <h3>Cordova</h3>
+                <br>
+                <h5>Add plattform</h5>
+                <pre><code data-trim>
+cordova platform add ios|android
+                </code></pre>
+            </section>
+            <section>
+                <h3>Cordova</h3>
+                <br>
+                <h5>Build specific platform</h5>
+                <pre><code data-trim>
+cordova build ios
+                </code></pre>
+                <p><small>
+                Alternative:
+                </small></p>
+                <pre><code data-trim>
+cordova prepare ios
+cordova compile ios
+                </code></pre>
+            </section>
+            <section>
+                <h3>Cordova</h3>
+                <br>
+                <h5>Add a plugin</h5>
+                <pre><code data-trim>
+cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-device.git
+                </code></pre>
+                <br>
+                <h5>List installed plugins</h5>
+                <pre><code data-trim>
+cordova plugin ls
+                </code></pre>
+            </section>
+        </section>
 
     </div>
 
