@@ -1,5 +1,4 @@
 # Enterprise JS Workshop Slides
-===============================
 
 ## [/ch/open workshop 10.9.2013][1]
 
