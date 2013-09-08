@@ -41,11 +41,11 @@ V70 PhoneGap / Cordova (30Min.)
 Ü80 Cordova barcode reader integration (45Min.)
 
 V90 advanced concepts
-- continuous integration, coverage
-- hammer.js, event bus, ios device debugging
+- continuous integration, coverage calculation
+- hammer.js
 
 V100 Dolphin.js (15Min.)
 
-roundup / summary (10Min.) -TODO
+roundup / summary (10Min.)
 
  [1]: http://www.ch-open.ch/wstage/workshop-tage/2013/aktuelles-programm-2013/ws-2-performante-mobilapplikationen-mit-javascript/
