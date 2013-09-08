@@ -1082,6 +1082,21 @@ promise1.then(getStuff).then(function(myServerScript2Data){
 });
                 </code></pre>
             </section>
+            <section>
+                <h3>Deferreds</h3>
+                <br>
+                <h5>Using custom Deferred objects</h5>
+                <pre><code data-trim class="javascript">
+_startItemAnimation: function(el) {
+    var dfd = $.Deferred();
+    Move(el).set('-webkit-transform', 'rotateX(360deg)')
+            .duration(1000).end(function () {
+        dfd.resolve();
+    });
+    return dfd.promise();
+}
+                </code></pre>
+            </section>
         </section>
 
 <!------------------ Cordova Intro ------------------>
