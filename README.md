@@ -1,5 +1,13 @@
 # Enterprise JS Workshop Slides
 
+## offline access
+
+```bash
+git clone https://github.com/canoo/enterprise-js-slides.git
+git submodule init
+git submodule update
+```
+
 ## [/ch/open workshop 10.9.2013][1]
 
 ### 09.10 - 10:30 (1:20h)
