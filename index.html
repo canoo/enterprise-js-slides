@@ -26,11 +26,24 @@
             <img src="resources/images/backbone.png" width=500px/>
             </a>
             <br>
-
             <p style="text-align: right;">
                 <small>Oleg Buss, Andreas Hölzl</small>
             </p>
+        </section>
 
+        <section data-background="#ADE4D3">
+            <h2>Setup</h2>
+            <br>
+            <pre><code data-trim>
+# udpate!
+git pull
+
+# new? ...
+git clone https://github.com/canoo/enterprise-js-workspace.git
+git clone https://github.com/canoo/enterprise-js-slides.git
+
+# follow enterprise-js-workspace/README.md
+            </code></pre>
         </section>
 
         <section data-background="#ADE4D3">
@@ -196,6 +209,7 @@
                     <li>configuration over programming</li>
                     <li>heavy DOM</li>
                     <li>customization difficult</li>
+                    <li>poor performance on Android</li>
                     <li>500KB</li>
                 </ul>
             </section>
@@ -206,6 +220,7 @@
                     <li>cross-plattform, multi-channel</li>
                     <li>few UI components</li>
                     <li>plattform optimized code</li>
+                    <li>tedious integration of custom components</li>
                     <li>slow iteration cycles, complex</li>
                 </ul>
             </section>
@@ -215,6 +230,8 @@
                 <ul>
                     <li>lightweight</li>
                     <li>flexible</li>
+                    <li>extendable</li>
+                    <li>well known</li>
                     <li>just MVC, no components</li>
                 </ul>
             </section>
@@ -292,14 +309,14 @@ var testModule = (function () {
 
     return {
         incrementCounter: function () {
-        return counter++;
-    },
+            return counter++;
+        },
 
-    resetCounter: function () {
-        console.log( "counter value prior to reset: " + counter );
-        counter = 0;
-    }
-};
+        resetCounter: function () {
+            console.log( "counter value prior to reset: " + counter );
+            counter = 0;
+        }
+    };
 
 })();
 
@@ -361,13 +378,18 @@ script.src = "http://example.com/myscript.min.js";
 firstScript.parentNode.insertBefore( script, firstScript );
                 </code></pre>
 
-                <h4>require()</h4>
+                <h4>require.js - require()</h4>
                 <pre><code data-trim class="javascript">
-require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {
-    JSON = JSON || window.JSON;
-    console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );
+require( [ 'util/myscript' ], function ( MyScript ) {
+    console.log( MyScript.doSomething() );
 });
                 </code></pre>
+                <!--<pre><code data-trim class="javascript">-->
+<!--require( [ window.JSON ? undefined : 'util/json2' ], function ( JSON ) {-->
+    <!--JSON = JSON || window.JSON;-->
+    <!--console.log( JSON.parse( '{ "JSON" : "HERE" }' ) );-->
+<!--});-->
+                <!--</code></pre>-->
             </section>
             <section>
                 <h3>AMD - Asynchronous Module Definition</h3>
@@ -582,6 +604,7 @@ require([], function () {
             <section>
                 <h3>Writing tests</h3>
                 <br>
+                <small>test/app/models/Model-test.js</small>
                 <pre><code data-trim class="javascript">
 define([
     'buster',
