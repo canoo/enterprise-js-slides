@@ -1105,21 +1105,6 @@ promise1.then(getStuff).then(function(myServerScript2Data){
 });
                 </code></pre>
             </section>
-            <section>
-                <h3>Deferreds</h3>
-                <br>
-                <h5>Using custom Deferred objects</h5>
-                <pre><code data-trim class="javascript">
-_startItemAnimation: function(el) {
-    var dfd = $.Deferred();
-    Move(el).set('-webkit-transform', 'rotateX(360deg)')
-            .duration(1000).end(function () {
-        dfd.resolve();
-    });
-    return dfd.promise();
-}
-                </code></pre>
-            </section>
 
             <section>
                 <h3>Deferreds</h3>
@@ -1147,6 +1132,36 @@ async().progress(function(update) {
 }).then(function(result){
     console.log(result); // prints "result" when async function returns
 });
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Deferreds</h3>
+                <br>
+                <h5>Sync a collection of deferred objects</h5>
+                <pre><code data-trim class="javascript">
+var async = function() {
+    var dfd = $.Deferred();
+
+    // resolve deferred between 1ms and 1000ms
+    setTimeout(function() {
+        dfd.resolve();
+    }, Math.floor((Math.random() * 1000) + 1));
+
+    return dfd.promise();
+}
+
+var deferreds = [];
+
+// create 100 async tasks
+for(var i = 0; i < 100; i++) {
+    deferreds.push(async());
+}
+
+$.when.apply(null, deferreds).then(function () {
+    console.log("all async operations has finished");
+});
+
                 </code></pre>
             </section>
 
