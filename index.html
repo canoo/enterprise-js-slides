@@ -52,9 +52,13 @@
                 <h2>Oleg</h2>
                 <br>
                 <div class="vbox">
-                    <div class="vbox-item" style="margin-right: 50px;">
-                        <img src="resources/images/oleg.jpg" width="200"/>
+                        <div class="vbox-item" style="margin-right: 50px;">
+                            <img src="resources/images/oleg.jpg" width="200"/>
+                        <div>
                         <small><a href="https://github.com/olegomon">github/olegomon</a></small>
+                        <small><a href="http://www.twitter.com/olegomon">@olegomon</a></small>
+
+                        </div>
                     </div>
                     <div class="vbox-item">
                         <ul>
@@ -71,7 +75,9 @@
                 <br>
                 <div class="vbox">
                     <div class="vbox-item" style="margin-right: 50px;">
-                        <img src="http://www.gravatar.com/avatar/3a6dc00e490885b8d71804fb1141755c?s=200"/>
+                        <div>
+                            <img src="http://www.gravatar.com/avatar/3a6dc00e490885b8d71804fb1141755c?s=200"/>
+                        </div>
                         <small><a href="http://www.twitter.com/andywoodly">@andywoodly</a></small>
                     </div>
                     <div class="vbox-item">
@@ -628,7 +634,9 @@ buster-test
             <section>
                 <h2>Build automatization</h2>
                 <br>
-                <small><a href="http://gruntjs.com/" target="_blank">grunt.js</a></small>
+                <h5><a href="http://gruntjs.com/" target="_blank">grunt.js</a></h5>
+                <br>
+                <h5>Demo</h5>
             </section>
         </section>
 
@@ -786,99 +794,81 @@ todo1.on('change:title', function() { /* handle title changes */ });
                 <h5><a href="http://backbonejs.org/#View" target="_blank">View</a></h5>
             </section>
             <section>
-                <h3>View - Custom <em>render()</em></h3>
-                <br>
-                <small>Override <em>render()</em> with your code that renders the view and update <em>this.$el</em> with the new HTML.</small>
+                <h3>View - Properties</h3>
                 <br>
                 <pre><code data-trim class="javascript">
 var MyView = Backbone.View.extend({
 
-    render: function() {
-        this.$el.html('&lt;div&gt;I'm the template&lt;/div&gt;');
-        return this; // enable chained calls
-    }
+    // id property
+    id: 'main',
 
+    // el property
+    // - by default an empty div is created
+    // - you can set it to any HTML type like ul, li, input etc. or
+    // - also a CSS selector can be used
+    //   to associate this view with an existing DOM element
+    //   e.g. #main-container
+    // - a cached jQuery object $el is also available on the view
+    //   instance e.g. this.$el.width()
+    el: 'div',
+
+    // this will result in <div id="main"></div>
+    ...
 });
                 </code></pre>
             </section>
             <section>
-                <h3>View - <em>this.el</em></h3>
-                <br>
-                <h5>this.el</h5>
-                <p>
-                    <small>
-                        All views have a DOM element at all times (the el property), whether they've already been inserted into the page or not.
-                        this.el is created from the view's <em>tagName</em>, <em>className</em>, <em>id</em> and <em>attributes</em> properties, if specified.
-                        If not, <em>el</em> is an empty <em>div</em>.
-                    </small>
-                </p>
-                <br>
-                <h5>this.$el</h5>
-                <p>
-                    <small><em>this.$el</em> is a cached jQuery object for the view's element. A handy reference instead of re-wrapping the DOM element all the time.</small>
-                </p>
-                <br>
-                <h5>el: '#elemid'</h5>
-                <p>
-                    <small>If the element already exists in the page, you can set el as a CSS selector that matches the element.</small>
-                </p>
-                <pre><code data-trim class="javascript">
-var MyView = Backbone.View.extend({
-    el: '#elemid'
-    // ...
-});
-                </code></pre>
-                <p>
-                    <small>Alternatively, you can set el to an existing element when creating the view.</small>
-                </p>
-                <pre><code data-trim class="javascript">
-var todosView = new TodosView({el: $('#footer')});
-                </code></pre>
-            </section>
-            <section>
-                <h3>View - Templates</h3>
-                <br>
-                <small>Define a view template and render template from model data.</small>
+                <h3>View - Properties II</h3>
                 <br>
                 <pre><code data-trim class="javascript">
 var MyView = Backbone.View.extend({
 
-    template: _.template(…),
+    // className property
+    // - apply these classes on the el dom element
+    // - by default empty list
+    className: 'main-view vbox'
 
-    render: function() {
-        this.$el.html(this.template(this.model.attributes));
-        return this;
-    }
+    // attributes hash or function which returns a hash
+    // - apply these attributes on the el dom element
+    // - by default empty
+    attributes: {
+        "data-main" : "true",
+        "my-attr" : "4711"
+    },
 
-});
-
-var view1 = new View({
-    // the model attributes
+    // this will result in
+    // <div class="main-view vbox" data-main="true" my-attr="4711"></div>
+    ...
 });
                 </code></pre>
             </section>
+
             <section>
-                <h3>View - Model binding</h3>
-                <br>
-                <small>Instead of updating the HTML by hand, you can bind your view's render function to the model's <em>'change'</em> event.</small>
+                <h3>View - DOM Events</h3>
                 <br>
                 <pre><code data-trim class="javascript">
 var MyView = Backbone.View.extend({
 
-    initialize: function() {
-        // bind model changes to view updates
-        this.listenTo(this.model, "change", this.render);
-    }
+    // events hash or function which returns a events hash
+    // following syntax is expected
+    // "DOMEventType CSSSelector" : "onEventHandler"
+    events: {
+        'click li[data-index]' : 'onDeleteItemClick',
 
-    render: function() {
-        // some implementation
+        // inline event handler
+        'focus .input-item' : function(event) {
+            alert("Focus Gained " + event.target);
+        },
+    },
+    // the DOM event is passed as an argument to this function
+    onDeleteItemClick : function(event) {
+        // handle delete event
     }
-
 });
                 </code></pre>
             </section>
             <section>
-                <h3>View - DOM events</h3>
+                <h3>View - DOM Events II</h3>
                 <br>
                 <pre><code data-trim class="javascript">
 var DocumentView = Backbone.View.extend({
@@ -901,6 +891,105 @@ var DocumentView = Backbone.View.extend({
     },
 
     ...
+
+});
+                </code></pre>
+            </section>
+            <section>
+                <h3>View - custom <em>initialize()</em></h3>
+                <br>
+                <small>Override <em>initialize()</em> to initializes the view.</small>
+                <br>
+ <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+     ...
+     initialize: function(options) {
+        options = options || {};
+
+        // custom view property passed to the view constructor
+        // needs to be assigned manually
+        this.title = options.title;
+
+        // custom JSON object passed to the constructor
+        this.data = options.data;
+
+        // if passed is set by default by the view
+        this.model = options.model;
+
+        // if passed is set by default by the view
+        this.collection = options.collection;
+     }
+});
+
+var view = new MyView({
+    model: myModel,
+    collection: myCollection,
+    title: "My View"
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>View - Custom <em>render()</em></h3>
+                <br>
+                <small>Override <em>render()</em> with your code that renders the view and update <em>this.$el</em> with the new HTML.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+
+    ...
+
+    render: function() {
+        this.$el.html('&lt;div&gt;I'm the template&lt;/div&gt;');
+        return this; // enable chained calls
+    }
+
+    ...
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>View - Templates</h3>
+                <br>
+                <small>Define a view template and render template from model data.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+
+    // template property
+    // - can be a compiled template function or a selector to a template
+    template: _.template(…),
+
+    render: function() {
+        // invoke the compiled template with the model attributes
+        var html = this.template(this.model.toJSON());
+        // or with a simple JSON object
+        var html = this.template({ title: 'My Title' });
+        // set the generated html on the $el element
+        this.$el.html(html);
+        return this;
+    }
+
+});
+        </code></pre>
+            </section>
+            <section>
+                <h3>View - Model binding</h3>
+                <br>
+                <small>Instead of updating the HTML by hand, you can bind your view's render function to the model's <em>'change'</em> event.</small>
+                <br>
+                <pre><code data-trim class="javascript">
+var MyView = Backbone.View.extend({
+
+    initialize: function() {
+        // bind model changes to view updates
+        this.listenTo(this.model, "change", this.render);
+    }
+
+    render: function() {
+        // some implementation
+    }
 
 });
                 </code></pre>
