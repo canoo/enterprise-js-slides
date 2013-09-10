@@ -1093,29 +1093,56 @@ _.extend(Controller.prototype, Backbone.Events, {
                 <h5>Backbone.js plugin that provides:</h5>
                 <br>
                 <ul>
-                    <li>full template lifecycle</li>
-                    <li>layout structuring</li>
+                    <li>full template lifecycle - load and compile</li>
                     <li>ensuring proper cleanup for all Views</li>
-                    <li>control of your nested Views</li>
-                    <li>concise API</li>
+                    <li>concise API to build view hierarchies</li>
                 </ul>
             </section>
+
             <section>
                 <h3>LayoutManager</h3>
                 <br>
-                <h5>Example</h5>
+                <h5>Configuration</h5>
+                <pre><code data-trim class="javascript">
+Backbone.Layout.configure({
+    // the location of the html templates
+    prefix        : 'app/templates/',
+
+    fetchTemplate : function (path) {
+        // To put this method in async-mode
+        var done = this.async();
+
+        // Fetch the path in `template` property
+        // and compile the contents into a template function
+        $.get(path + '.html', function (contents) {
+            // compile the template with Handlebars
+            // and call the async callback
+            done(Handlebars.compile(contents));
+        }, "text");
+    },
+
+    renderTemplate: function (template, context) {
+        // invoke the handlebars template with the data/context
+        // returns a generated html snippet
+        return template(context);
+    },
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>LayoutManager</h3>
+                <br>
+                <h5>Template Handling</h5>
                 <pre><code data-trim class="javascript">
 var LoginView = Backbone.Layout.extend({
-    template: "#login-template"
+    // use template app/templates/views/login-template.html
+    template: "views/login-template"
 });
 
 var main = new Backbone.Layout({
-    template: "#main-layout",
-
-    // In the secondary column, put a new Login View.
-    views: {
-        ".secondary": new LoginView()
-    }
+    // use template app/templates/layouts/main-layout.html
+    template: "layouts/main-layout",
 });
                 </code></pre>
             </section>
@@ -1127,23 +1154,60 @@ var main = new Backbone.Layout({
 // declarative using 'views' property
 Backbone.Layout.extend({
     views: {
-        "header": new HeaderView(),
-        "section": new ContentView(),
-        "footer": new FooterView()
+        ".header" : new HeaderView(),
+        ".section": new ContentView(),
+        ".footer" : new FooterView()
     }
 });
 
-// dynamically setting views
-myLayout.setView("header", new HeaderView());
+// replace the view with the new one
+myLayout.setView(".header", new HeaderView());
 
 // ... inserting views
 myLayout.insertView(new ListItemView());
 
 // ... removing views
 myLayout.removeView(".some-selector");
+
+// ... getting views
+myLayout.getViews(".some-selector", function(view) { ... });
+                </code></pre>
+            </section>
+
+        <section>
+                <h3>LayoutManager - Rendering</h3>
+                <br>
+                <pre><code data-trim class="javascript">
+var MainView = Backbone.Layout.extend({
+
+    beforeRender: function() {
+        // good place to insert nested views and attach view listeners
+        this.insertView('.header', new Header());
+
+        var button = new Button({ title: "Submit" });
+        this.listenTo(button, 'press', this._onSubmit);
+        this.insertView('.submit-button', button);
+    },
+    serialize: function() {
+        // pass any data to the template e.g.
+        return this.model.toJSON();
+    },
+    afterRender: function() {
+        // good place to initialize any jQuery plugins etc.
+        // the generated html is in the DOM
+        console.log(this.$el.width() + ", " + this.$el.height());
+    },
+});
+// render events
+var main = new MainView();
+main.on('beforeRender', function() {});
+main.on('afterRender', function() {});
+
                 </code></pre>
             </section>
         </section>
+    </section>
+
 
 <!------------------ Deferreds ------------------>
 
